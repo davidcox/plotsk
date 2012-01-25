@@ -1,0 +1,17 @@
+{ "width":            -1,
+  "height":           -1,
+  "ext_pad_x":        20,
+  "ext_pad_y":        20,
+  "rf_pad_x":         15,
+  "rf_pad_y":         15,
+  "tick_gutter_x":    15,
+  "tick_gutter_y":    15,
+  "rf_major_x":       10,
+  "rf_minor_x":       5,
+  "rf_major_y":       10,
+  "rf_minor_y":       5,
+  "n_x_ticks":        8,
+  "n_y_ticks":        8,
+  "x_data_pad_factor": 1.0,
+  "y_data_pad_factor": 1.2
+}

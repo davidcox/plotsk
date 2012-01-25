@@ -1,0 +1,33 @@
+html
+
+  head
+    
+    link(rel='stylesheet', href='styles/range_frame.css', type='text/css')
+    
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+    script(src='http://mbostock.github.com/d3/d3.js?2.1.3')
+    script(src='scripts/range_frame.js')
+    
+    
+    // Create a plot object and setup callback to populate data
+    :coffeescript
+      window.onload = ->
+        rf = window.RFPlot(d3.select('#p1'))
+        plot = ->
+          rf.render()
+        d3.json('data.json', 
+                (json) -> 
+                  console.log('receiving data')
+                  rf.data = json
+                  rf.render())
+        d3.json('plot_spec.json',
+                (json) -> 
+                  console.log('receiving plot spec')
+                  rf.p = json
+                  rf.render())
+        window.onresize = -> rf.render()
+    
+  body
+  
+    .plot_area#p1
+    

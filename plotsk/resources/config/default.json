@@ -1,0 +1,8 @@
+{
+  "html_compile_cmd": "jade ${dst_path}",
+  "script_compile_cmd": "coffee -c ${script_path}",
+  "styles_compile_cmd": "",
+  "sync_cmd": "rsync -a \"${src_path}\" \"${dst_path}\"",
+  "alt_view_url_cmd": "open \"${url}\" ",
+  "view_url_cmd": "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --disk-cache-size=1 --media-cache-size=1 --allow-file-access-from-files \"${url}\""
+}

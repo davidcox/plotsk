@@ -1,0 +1,4 @@
+simplejson
+numpy
+# bottle>=0.10.6
+# cherrypy
