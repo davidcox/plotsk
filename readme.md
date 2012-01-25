@@ -22,29 +22,29 @@ I don't want to analyze my data in Javascript in a browser... I just want to plo
 
 To install plotsk, clone the project and then type the following command in the top-level directory:
   
-  pip -r requirements.txt install .
+    pip -r requirements.txt install .
 
 ## Usage
 
 Plotsk endeavors to provide a simple clean interface:
 
-  import plotsk
+    import plotsk
   
-  p = plotsk.Plot()  # also possible to specify skeleton = 'xxx'
-  p.add_line(x, y1, style_dict)  # implicitly name 'x' and 'y'
-  p.add_line(x, y2)
+    p = plotsk.Plot()  # also possible to specify skeleton = 'xxx'
+    p.add_line(x, y1, style_dict)  # implicitly name 'x' and 'y'
+    p.add_line(x, y2)
 
-  # ... or ...
-  p.add_data(x, 'x')
-  p.add_data(y1, 'y')
-  p.add_line('x', 'y', '-*')
+    # ... or ...
+    p.add_data(x, 'x')
+    p.add_data(y1, 'y')
+    p.add_line('x', 'y', '-*')
 
-  # launch a browser and display the figure
-  p.show()
+    # launch a browser and display the figure
+    p.show()
 
-  # save the figure html/js/css to a path
-  bake_path = "/path/to/baked/figure/files"
-  p.bake(bake_path)
+    # save the figure html/js/css to a path
+    bake_path = "/path/to/baked/figure/files"
+    p.bake(bake_path)
   
 More functionality on the way...
 
