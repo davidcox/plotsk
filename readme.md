@@ -16,16 +16,16 @@ I don't want to analyze my data in Javascript in a browser... I just want to plo
 
 ## What is Plotsk
 
-**Plotsk** is a python library that bridges between numpy/scipy analysis and plotting in a web browser.  Plotsk stands for "PLOT SKeletons": it allows you to specify (or create your own) JS or coffeescript skeleton with which your data is plotted.  The python layer itself is very very thin, basically just deploying the skeleton and outputting the data-to-be-plotted in json format. The emphasis is on getting reasonable-looking plots up on the screen with as little fuss as possible.  At the same time, for publication figures, or for presentation showpieces, you have the option of "baking" the figure skeleton and editing it directly (e.g. to add as much interactive JS/D3 stuff as you like).  You can also create your own personal skeletons (either using the existing one as starting points, or starting from scratch) if you like things to look a particular way.  Plotsk tries to exist as much as possible at the level of semantics, allowing the details of appearance to be under your control when you want them to be.
+**Plotsk** is a python library that bridges between numpy/scipy analysis and plotting in a web browser.  Plotsk stands for "PLOT SKeletons": it allows you to specify (or create your own) JS or coffeescript skeleton with which your data is plotted.  The python layer itself is very very thin, basically just deploying the skeleton and outputting the data-to-be-plotted in json format. The emphasis is on getting reasonable-looking plots up on the screen with as little fuss as possible.  At the same time, for publication figures, or for presentation showpieces, you have the option of "baking" the figure skeleton and editing it directly (e.g. to add as much interactive JS/D3 stuff as you like).  You can also create your own personal skeletons (either using the existing one as starting points, or starting from scratch) if you like things to look a particular way or if you want to build-in functionality or plot-types that Plotsk doesn't ship with.  Plotsk tries to exist as much as possible at the level of semantics, allowing the details of appearance to be under your control when you want them to be.
 
 ## Installation
 
 To install plotsk, clone the project and then type the following command in the top-level directory:
   
-    pip -r requirements.txt install .
+    pip install -r requirements.txt .
     
     # ... or, if you want to edit things
-    pip -r requirements.txt install -e .
+    pip install -r requirements.txt -e .
 
 ## Usage
 
