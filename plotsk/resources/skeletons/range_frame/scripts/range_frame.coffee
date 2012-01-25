@@ -77,7 +77,7 @@ class RangeFramePlot
         min_y = Infinity
         max_y = -Infinity
         
-        for l in @p.lines
+        for l in @p.lines.concat(@p.points)
             x_data = @data[l.abscissa]
             y_data = @data[l.ordinate]
             
@@ -240,34 +240,46 @@ class RangeFramePlot
 
         l_id = -1
         for line in @p.lines
-            
             l_id += 1
-            
             zipped_data = d3.zip(@data[line.abscissa].values, 
                                  @data[line.ordinate].values)
-            
-            console.log(@x_scale(zipped_data[0][0]).toString())
-            
+                        
             line_cls = 'line'
             line_cls += ' ' + line['css_class'] if line['css_class']
             
+            @plotSeries(data_area, zipped_data, line_cls, true)
+
+        p_id = -1
+        for pts in @p.points
+            p_id += 1
+            zipped_data = d3.zip(@data[pts.abscissa].values, 
+                                 @data[pts.ordinate].values)
+            
+            pts_cls = 'points'
+            pts_cls += ' ' + pts['css_class'] if pts['css_class']
+            
+            @plotSeries(data_area, zipped_data, pts_cls, false)
+
+    plotSeries: (data_area, zipped_data, cls, plot_line) ->
+            
+        if plot_line
             # Line plot
             data_area.append('svg:path')
                 .data([zipped_data])
-                .attr('class', line_cls)
+                .attr('class', cls)
                 .attr('d', d3.svg.line()
                                  .x((d) => @x_scale(d[0]))
                                  .y((d) => @y_scale(d[1])))
             
 
-            # Scatter plot (effectively)
-            data_area.selectAll('circle#' + "data_element_#{l_id}")
-                .data(zipped_data)
-                .enter().append('svg:circle')
-                    .attr('class', line_cls)
-                    .attr('cx', (d) => @x_scale(d[0]))
-                    .attr('cy', (d) => @y_scale(d[1]))
-                    .attr('r', 3.5)
+        # Scatter plot (effectively)
+        data_area.selectAll('circle#' + "data_element_#{cls}")
+            .data(zipped_data)
+            .enter().append('svg:circle')
+                .attr('class', cls)
+                .attr('cx', (d) => @x_scale(d[0]))
+                .attr('cy', (d) => @y_scale(d[1]))
+                .attr('r', 3.5)
 
 # Attach the class to the global window object to make it accessible from
 # outside

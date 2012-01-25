@@ -61,7 +61,7 @@
       max_x = -Infinity;
       min_y = Infinity;
       max_y = -Infinity;
-      _ref = this.p.lines;
+      _ref = this.p.lines.concat(this.p.points);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         l = _ref[_i];
         x_data = this.data[l.abscissa];
@@ -140,31 +140,46 @@
     };
 
     RangeFramePlot.prototype.renderData = function() {
-      var data_area, l_id, line, line_cls, zipped_data, _i, _len, _ref, _results,
-        _this = this;
+      var data_area, l_id, line, line_cls, p_id, pts, pts_cls, zipped_data, _i, _j, _len, _len2, _ref, _ref2, _results;
       data_area = this.svg_container.append('svg:g').attr('width', '100%').attr('class', 'data_area');
       l_id = -1;
       _ref = this.p.lines;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         line = _ref[_i];
         l_id += 1;
         zipped_data = d3.zip(this.data[line.abscissa].values, this.data[line.ordinate].values);
-        console.log(this.x_scale(zipped_data[0][0]).toString());
         line_cls = 'line';
         if (line['css_class']) line_cls += ' ' + line['css_class'];
-        data_area.append('svg:path').data([zipped_data]).attr('class', line_cls).attr('d', d3.svg.line().x(function(d) {
+        this.plotSeries(data_area, zipped_data, line_cls, true);
+      }
+      p_id = -1;
+      _ref2 = this.p.points;
+      _results = [];
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        pts = _ref2[_j];
+        p_id += 1;
+        zipped_data = d3.zip(this.data[pts.abscissa].values, this.data[pts.ordinate].values);
+        pts_cls = 'points';
+        if (pts['css_class']) pts_cls += ' ' + pts['css_class'];
+        _results.push(this.plotSeries(data_area, zipped_data, pts_cls, false));
+      }
+      return _results;
+    };
+
+    RangeFramePlot.prototype.plotSeries = function(data_area, zipped_data, cls, plot_line) {
+      var _this = this;
+      if (plot_line) {
+        data_area.append('svg:path').data([zipped_data]).attr('class', cls).attr('d', d3.svg.line().x(function(d) {
           return _this.x_scale(d[0]);
         }).y(function(d) {
           return _this.y_scale(d[1]);
         }));
-        _results.push(data_area.selectAll('circle#' + ("data_element_" + l_id)).data(zipped_data).enter().append('svg:circle').attr('class', line_cls).attr('cx', function(d) {
-          return _this.x_scale(d[0]);
-        }).attr('cy', function(d) {
-          return _this.y_scale(d[1]);
-        }).attr('r', 3.5));
       }
-      return _results;
+      return data_area.selectAll('circle#' + ("data_element_" + cls)).data(zipped_data).enter().append('svg:circle').attr('class', cls).attr('cx', function(d) {
+        return _this.x_scale(d[0]);
+      }).attr('cy', function(d) {
+        return _this.y_scale(d[1]);
+      }).attr('r', 3.5);
     };
 
     return RangeFramePlot;

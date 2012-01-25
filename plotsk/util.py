@@ -37,3 +37,8 @@ def syscall(cmd):
 def rsync(src, dst):
     cmd = Template(config['sync_cmd']).render(src_path=src, dst_path=dst)
     syscall(cmd)
+    
+def coffeescript_compile(src_path):
+    script_path = os.path.join(src_path, 'scripts')
+    cmd = Template(config['script_compile_cmd']).render(script_path=script_path)
+    syscall(cmd)

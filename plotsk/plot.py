@@ -12,6 +12,7 @@ class Plot (object):
         self.plot_spec = {}
         self.load_default_plot_spec()
         self.plot_spec['lines'] = []
+        self.plot_spec['points'] = []
         
     def add_data(self, data, name, label=None, units=None):
         
@@ -24,8 +25,11 @@ class Plot (object):
         self.data_series[name] = {'values' : list(data),
                                   'label' : label,
                                   'units' : units}
+    
+    def add_points(self, d1, d2, name=None, style=None):
+        return self.add_line(d1, d2, name, style, points=True)
         
-    def add_line(self, d1, d2, name=None, style=None):
+    def add_line(self, d1, d2, name=None, style=None, points=False):
         
         # if d1 refers to an existing data set
         if self.lookup_data(d1) is not None:
@@ -46,13 +50,20 @@ class Plot (object):
         if style is None:
             style = {}
         
+        if points:
+            default_name_template = 'points_%d'
+            plot_spec_key = 'points'
+        else:
+            default_name_template = 'line_%d'
+            plot_spec_key = 'lines'
+            
         if name is None:
-            name = 'line_%d' % len(self.plot_spec['lines'])
+            name = default_name_template % len(self.plot_spec[plot_spec_key])
         
-        self.plot_spec['lines'].append({'name': name,
-                                        'abscissa': d1,
-                                        'ordinate': d2,
-                                        'style': style})
+        self.plot_spec[plot_spec_key].append({'name': name,
+                                              'abscissa': d1,
+                                              'ordinate': d2,
+                                              'style': style})
     
     def lookup_data(self, d):
         
@@ -104,8 +115,9 @@ class Plot (object):
         if not os.path.exists(self.skeleton_path):
             raise ValueError('Unknown plotsk skeleton')
         
-        # check the proposed deployment path
+        coffeescript_compile(self.skeleton_path)
         rsync(self.skeleton_path + '/', target_path)
+        
             
         
     
