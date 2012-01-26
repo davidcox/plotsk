@@ -37,7 +37,9 @@ class Plot (object):
         else:
             # choose a name for the new data set
             base_name = 'x'
-            self.add_data(d1, self.new_valid_data_name(base_name))
+            data_name = self.new_valid_data_name(base_name)
+            self.add_data(d1, data_name)
+            d1 = data_name
         
         # if d2 refers to an existing data set
         if self.lookup_data(d2):
@@ -45,7 +47,9 @@ class Plot (object):
         else:
             # choose a name for the new data set
             base_name = 'y'
-            self.add_data(d1, self.new_valid_data_name(base_name))
+            data_name = self.new_valid_data_name(base_name)
+            self.add_data(d2, data_name)
+            d2 = data_name
         
         if style is None:
             style = {}
