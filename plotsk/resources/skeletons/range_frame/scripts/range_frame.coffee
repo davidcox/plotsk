@@ -34,6 +34,7 @@ class RangeFramePlot
         console.log(@plot_width)
 
         # Adjust the min and max according to data pad factors
+        # TODO: allow manual setting of these values
         x_span = @data_max_x - @data_min_x;
         y_span = @data_max_y - @data_min_y;
         x_span_pad = (@p.x_data_pad_factor - 1.0) * x_span / 2.0
@@ -43,11 +44,14 @@ class RangeFramePlot
         @data_min_y -= y_span_pad
         @data_max_y += y_span_pad
         
+        
         # total offsets to data area
-        @data_area_offset_x =  @p.ext_pad_x + @p.tick_gutter_x + 
-                              @p.rf_major_x + @p.rf_pad_x
+        @data_area_offset_x = @p.ext_pad_x +  # plot-wide x padding
+                              @p.tick_gutter_x + # space for tick labels
+                              @p.rf_major_x + # size of "major" ticks
+                              @p.rf_pad_x # padding btwn frame and data area
         @data_area_offset_y = @p.ext_pad_y + @p.tick_gutter_y + 
-                             @p.rf_major_y + @p.rf_pad_y
+                              @p.rf_major_y + @p.rf_pad_y
 
         # Linear mapping functions (TODO: log, etc.)
         @x_scale = d3.scale.linear()
@@ -65,11 +69,15 @@ class RangeFramePlot
                                   .attr('width', '100%')
                                   .attr('height', '100%')
 
+        
+        # Render plot parts
         @renderGrid()
         @renderHorizontalRangeFrame()
         @renderVerticalRangeFrame()
         @renderData()
     
+    
+     # Min and max x and y values, across all data
     dataExtents: ->
 
         min_x = Infinity
@@ -92,6 +100,7 @@ class RangeFramePlot
             max_y = tmp_max_y if tmp_max_y > max_y
             
         return [min_x, max_x, min_y, max_y]
+    
     
     renderGrid: ->
         grid_area = @svg_container.append('svg:g')
@@ -129,9 +138,11 @@ class RangeFramePlot
         y_range_frame = @svg_container.append('svg:g')
                                       .attr('class', 'vertical_range_frame')
 
+        # Determine ticks
         min_y_tick = d3.min(@y_scale.ticks(@p.n_y_ticks))
         max_y_tick = d3.max(@y_scale.ticks(@p.n_y_ticks))
 
+        # Determine starting offsets
         y_frame_start_x = @data_area_offset_x - @p.rf_pad_x
         y_frame_text_start_x = y_frame_start_x - @p.tick_gutter_x
 
