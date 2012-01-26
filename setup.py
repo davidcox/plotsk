@@ -1,37 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" distribute- and pip-enabled setup.py for plotsk """
+""" distribute- and pip-enabled setup.py """
 
 from distribute_setup import use_setuptools
 use_setuptools()
-from setuptools import setup, find_packages
+import setuptools
 
-import os
-import re
+def subdir_findall(dir, subdir):
+    strip_n = len(dir.split('/'))
+    path = '/'.join((dir, subdir))
+    return ['/'.join(s.split('/')[strip_n:]) for s in setuptools.findall(path)]
 
-
-def recursive_get_paths(base_path):
-    
-    paths = []
-    for root, dirnames, filenames in os.walk(base_path):
-        # shift off the first path element
-        split_root = root.split(os.sep)
-        print split_root
-        r = os.path.join(*split_root[1:])
-        print r
-        for filename in filenames:
-            paths.append(os.path.join(r, filename))
-
-    return paths
-
-print recursive_get_paths('plotsk/resources')
-
-setup(
+setuptools.setup(
     name='plotsk',
     version='dev',
-    packages=['plotsk'],
+    packages=setuptools.find_packages(),
     
-    include_package_data=True,
-    package_data= { 'plotsk' : recursive_get_paths('plotsk/resources') }
+    package_data= { 'plotsk' : subdir_findall('plotsk', 'resources') },
+    include_package_data=True
 )
