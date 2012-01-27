@@ -37,7 +37,9 @@ class Plot (object):
         else:
             # choose a name for the new data set
             base_name = 'x'
-            self.add_data(d1, self.new_valid_name(base_name))
+            data_name = self.new_valid_data_name(base_name)
+            self.add_data(d1, data_name)
+            d1 = data_name
         
         # if d2 refers to an existing data set
         if self.lookup_data(d2):
@@ -45,7 +47,9 @@ class Plot (object):
         else:
             # choose a name for the new data set
             base_name = 'y'
-            self.add_data(d1, self.new_valid_name(base_name))
+            data_name = self.new_valid_data_name(base_name)
+            self.add_data(d2, data_name)
+            d2 = data_name
         
         if style is None:
             style = {}
@@ -115,8 +119,9 @@ class Plot (object):
         if not os.path.exists(self.skeleton_path):
             raise ValueError('Unknown plotsk skeleton')
         
-        coffeescript_compile(self.skeleton_path)
+        #coffeescript_compile(self.skeleton_path)
         rsync(self.skeleton_path + '/', target_path)
+        coffeescript_compile(target_path)
         
             
         
@@ -125,8 +130,8 @@ class Plot (object):
         "Display the plot in a web browser"
         
         pth = self.bake()
-        print(pth)
-        syscall('open %s/plot.html' % pth)
+        print("Plot Path:%s" % pth)
+        view('%s/plot.html' % pth)
         
         
     def bake(self, target_path=None):

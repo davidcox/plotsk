@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 from pkg_resources import resource_filename, resource_string
 import simplejson as json
 import shlex
@@ -25,8 +26,12 @@ def read_config(cfg_path):
     return d
 
 def default_config():
-    return read_config(resource_filename(top_level_module_name, 
-                                  'resources/config/default.config'))
+    if 'linux' in sys.platform:
+        return read_config(resource_filename(top_level_module_name,
+            'resources/config/linux.config'))
+    else:
+        return read_config(resource_filename(top_level_module_name, 
+              'resources/config/default.config'))
 
 def load_config():
     # check for .plotsk in ~/
@@ -40,12 +45,17 @@ config = load_config()
 
 # work around bizarro pkg_resources / MACOSX_DEPLOYMENT_TARGET insanity
 def syscall(cmd):
-    os.unsetenv('MACOSX_DEPLOYMENT_TARGET')
+    if sys.platform == 'darwin': os.unsetenv('MACOSX_DEPLOYMENT_TARGET')
+    print("calling %s" % str(cmd))
     return subprocess.call(shlex.split(str(cmd)))
 
 
 def rsync(src, dst):
     cmd = Template(config['sync_cmd']).render(src_path=src, dst_path=dst)
+    syscall(cmd)
+
+def view(filename):
+    cmd = Template(config['view_url_cmd']).render(url=filename)
     syscall(cmd)
     
 def coffeescript_compile(src_path):
